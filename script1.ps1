@@ -40,7 +40,7 @@ if (-not ("Wallpaper" -as [type])) {
 Remove-Item $tempImagePath -ErrorAction SilentlyContinue
 
 # Update the day index (loop from 0 to 39)
-$nextDay = ($currentDay + 1) % 40
+$nextDay = ($currentDay + 1)
 Set-Content $dayFilePath $nextDay
 
 # Register a daily scheduled task if it doesn't already exist
