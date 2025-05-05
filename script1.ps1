@@ -48,7 +48,8 @@ $taskName = "ChangeWallpaperEveryDay"
 if (-not (Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue)) {
     $taskAction = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-File `"$PSCommandPath`""
     $taskTrigger = New-ScheduledTaskTrigger -Daily -At 00:00
-    Register-ScheduledTask -Action $taskAction -Trigger $taskTrigger -TaskName $taskName -Description "Change wallpaper daily"
+    $taskSetting = New-ScheduledTaskSettingsSet -StartWhenAvailable
+    Register-ScheduledTask -Action $taskAction -Setting $taskSetting -Trigger $taskTrigger -TaskName $taskName -Description "Change wallpaper daily"
     Write-Host "Scheduled task created."
 } else {
     Write-Host "Scheduled task already exists."
