@@ -1,5 +1,29 @@
 ﻿Add-Type -AssemblyName System.Drawing
 
+ # נתיב הסקריפט המקומי (הקובץ שרץ כרגע)
+$localScriptPath = $PSCommandPath
+
+# כתובת ה-URL של הסקריפט בגיטהאב
+$remoteScriptUrl = "https://raw.githubusercontent.com/TsofnatMaman/WallpaperScript/main/backgroundVacation/script1.ps1"
+
+try {
+    # הורדה זמנית
+    $tempScriptPath = "$env:TEMP\script1_temp.ps1"
+    Invoke-WebRequest -Uri $remoteScriptUrl -OutFile $tempScriptPath -UseBasicParsing
+
+    # השוואה: האם התוכן שונה? רק אם כן, נחליף
+    if ((Get-FileHash $tempScriptPath).Hash -ne (Get-FileHash $localScriptPath).Hash) {
+        Copy-Item $tempScriptPath -Destination $localScriptPath -Force
+        Write-Host "Script was updated from remote repository. Please rerun it." -ForegroundColor Yellow
+        exit
+    } else {
+        Remove-Item $tempScriptPath -Force
+    }
+} catch {
+    Write-Host "Failed to check or download updated script." -ForegroundColor Red
+}
+
+
 $startDay = Get-Date "2025-5-15"
 $today = Get-Date
 $currentDay = ($today - $startDay).Days
