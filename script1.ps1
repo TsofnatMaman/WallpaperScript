@@ -2,7 +2,7 @@ $startDay = Get-Date "2025-5-15"
 $today = Get-Date
 $currentDay = ($today - $startDay).Days
 
-# Define the wallpaper URL based on the current day (Slide1.JPG to Slide40.JPG)
+# Define the wallpaper URL based on the current day
 $baseUrl = "https://raw.githubusercontent.com/TsofnatMaman/WallpaperScript/main/Images/Slide"
 $wallpaperUrl = "${baseUrl}$($currentDay + 1).JPG"
 
