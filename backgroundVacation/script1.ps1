@@ -86,3 +86,17 @@ if (-not ("Wallpaper" -as [type])) {
 [Wallpaper]::SystemParametersInfo(20, 0, $tempImagePath, 3)
 
 Write-Host "background setting success: $text"
+
+# Register a daily scheduled task if it doesn't already exist
+$taskName = "ChangeWallpaperEveryDay"
+if (-not (Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue)) {
+    $taskAction = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-File `"$PSCommandPath`""
+    $taskTrigger = New-ScheduledTaskTrigger -Daily -At 00:00
+    $taskSetting = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
+    Register-ScheduledTask -Action $taskAction -Setting $taskSetting -Trigger $taskTrigger -TaskName $taskName -Description "Change wallpaper daily"
+    Write-Host "Scheduled task created."
+} else {
+    Write-Host "Scheduled task already exists."
+}
+
+Write-Host "Wallpaper changed successfully to: $wallpaperUrl"
