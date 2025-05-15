@@ -17,11 +17,11 @@ try {
     $newHash = Get-FileHash $tempScriptPath
 
     if ($currentHash.Hash -ne $newHash.Hash) {
-        Copy-Item $tempScriptPath -Destination $localScriptPath -Force
+        #Copy-Item $tempScriptPath -Destination $localScriptPath -Force
         Write-Host "Script updated from GitHub. Relaunching..." -ForegroundColor Yellow
 
         # הפעלת הגרסה המעודכנת ויציאה
-        Start-Process powershell.exe -ArgumentList "-ExecutionPolicy Bypass -File `"$localScriptPath`""
+        #Start-Process powershell.exe -ArgumentList "-ExecutionPolicy Bypass -File `"$localScriptPath`""
         exit
     } else {
         Remove-Item $tempScriptPath -Force
