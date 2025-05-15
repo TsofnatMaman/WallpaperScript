@@ -31,7 +31,6 @@ catch {
     Write-Host "Failed to download updated script." -ForegroundColor Red
 }
 
-
 $startDay = Get-Date "2025-5-15"
 $today = Get-Date
 $currentDay = ($today - $startDay).Days
@@ -124,7 +123,12 @@ $taskName = "ChangeWallpaperEveryDay"
 if (-not (Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue)) {
     $taskAction = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-File `"$PSCommandPath`""
     $taskTrigger = New-ScheduledTaskTrigger -Daily -At 00:00
-    $taskSetting = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
+    $taskSetting = New-ScheduledTaskSettingsSet `
+        -StartWhenAvailable `
+        -AllowStartIfOnBatteries `
+        -DontStopIfGoingOnBatteries `
+        -MultipleInstances IgnoreNew
+
     Register-ScheduledTask -Action $taskAction -Setting $taskSetting -Trigger $taskTrigger -TaskName $taskName -Description "Change wallpaper daily"
     Write-Host "Scheduled task created."
 } else {
