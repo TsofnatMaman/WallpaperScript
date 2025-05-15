@@ -121,8 +121,8 @@ Write-Host "background setting success: $text"
 # Register a daily scheduled task if it doesn't already exist
 $taskName = "ChangeWallpaperEveryDay"
 if (-not (Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue)) {
-    $taskAction = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-File `"$PSCommandPath`""
-    $taskTrigger = New-ScheduledTaskTrigger -Daily -At 00:00
+    $taskAction = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-WindowStyle Minimized -File `"$PSCommandPath`""
+    $taskTrigger = New-ScheduledTaskTrigger -Daily -At 00:30
     $taskSetting = New-ScheduledTaskSettingsSet `
         -StartWhenAvailable `
         -AllowStartIfOnBatteries `
