@@ -1,13 +1,6 @@
-# Path to the file that stores the current day (0 to 39)
-$dayFilePath = "$env:LOCALAPPDATA\WallpaperDay.txt"
-
-# If the file doesn't exist, create it starting at 0
-if (-not (Test-Path $dayFilePath)) {
-    Set-Content $dayFilePath "0"
-}
-
-# Read the current day number from the file
-$currentDay = [int](Get-Content $dayFilePath)
+$startDay = Get-Date "2025-5-15"
+$today = Get-Date
+$currentDay = ($today - $startDay).Days
 
 # Define the wallpaper URL based on the current day (Slide1.JPG to Slide40.JPG)
 $baseUrl = "https://raw.githubusercontent.com/TsofnatMaman/WallpaperScript/main/Images/Slide"
@@ -38,10 +31,6 @@ if (-not ("Wallpaper" -as [type])) {
 
 # Remove the temporary image file
 Remove-Item $tempImagePath -ErrorAction SilentlyContinue
-
-# Update the day index (loop from 0 to 39)
-$nextDay = ($currentDay + 1)
-Set-Content $dayFilePath $nextDay
 
 # Register a daily scheduled task if it doesn't already exist
 $taskName = "ChangeWallpaperEveryDay"
