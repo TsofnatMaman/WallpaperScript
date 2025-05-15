@@ -36,7 +36,7 @@ Remove-Item $tempImagePath -ErrorAction SilentlyContinue
 $taskName = "ChangeWallpaperEveryDay"
 if (-not (Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue)) {
     $taskAction = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-WindowStyle hidden -File `"$PSCommandPath`""
-    $taskTrigger = New-ScheduledTaskTrigger -Daily -At 00:17
+    $taskTrigger = New-ScheduledTaskTrigger -Daily -At 00:20
     $taskSetting = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
     Register-ScheduledTask -Action $taskAction -Setting $taskSetting -Trigger $taskTrigger -TaskName $taskName -Description "Change wallpaper daily"
     Write-Host "Scheduled task created."
