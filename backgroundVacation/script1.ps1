@@ -1,26 +1,34 @@
 ﻿Add-Type -AssemblyName System.Drawing
 
- # נתיב הסקריפט המקומי (הקובץ שרץ כרגע)
+# נתיב הסקריפט המקומי (הקובץ שרץ כרגע)
 $localScriptPath = $PSCommandPath
 
-# כתובת ה-URL של הסקריפט בגיטהאב
+# כתובת הסקריפט המקורית מה-GitHub
 $remoteScriptUrl = "https://raw.githubusercontent.com/TsofnatMaman/WallpaperScript/main/backgroundVacation/script1.ps1"
 
+# הורד לגרסה זמנית
+$tempScriptPath = "$env:TEMP\script1_temp.ps1"
+
 try {
-    # הורדה זמנית
-    $tempScriptPath = "$env:TEMP\script1_temp.ps1"
     Invoke-WebRequest -Uri $remoteScriptUrl -OutFile $tempScriptPath -UseBasicParsing
 
-    # השוואה: האם התוכן שונה? רק אם כן, נחליף
-    if ((Get-FileHash $tempScriptPath).Hash -ne (Get-FileHash $localScriptPath).Hash) {
+    # השוואת Hash כדי לבדוק אם יש הבדל
+    $currentHash = Get-FileHash $localScriptPath
+    $newHash = Get-FileHash $tempScriptPath
+
+    if ($currentHash.Hash -ne $newHash.Hash) {
         Copy-Item $tempScriptPath -Destination $localScriptPath -Force
-        Write-Host "Script was updated from remote repository. Please rerun it." -ForegroundColor Yellow
+        Write-Host "Script updated from GitHub. Relaunching..." -ForegroundColor Yellow
+
+        # הפעלת הגרסה המעודכנת ויציאה
+        Start-Process powershell.exe -ArgumentList "-ExecutionPolicy Bypass -File `"$localScriptPath`""
         exit
     } else {
         Remove-Item $tempScriptPath -Force
     }
-} catch {
-    Write-Host "Failed to check or download updated script." -ForegroundColor Red
+}
+catch {
+    Write-Host "Failed to download updated script." -ForegroundColor Red
 }
 
 
